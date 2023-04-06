@@ -23,21 +23,28 @@ export function Post({ author, publishedAt, content }) {
 function handleCreateNewComment() {
     event.preventDefault()
     
-    setComments([...comments, newCommentText]);
+    setComments([...comments, newCommentText])
     setNewCommentText('');
 }
 
 function handleNewCommentChange() {
+    event.target.setCustomValidity('')
     setNewCommentText(event.target.value)
+}
+
+function handleNewCommentInvalid() {
+    event.target.setCustomValidity('Esse campo é obrigatório!')
 }
 
 function deleteComment(commentToDelete) {
     const commentsWithoutDeletedOne = comments.filter(comment => {
-        return comment !== commentToDelete;
+        return comment !== commentToDelete
     })
 
-    setComments(commentsWithoutDeletedOne);
+    setComments(commentsWithoutDeletedOne)
 }
+
+const isNewCommentEmpty = newCommentText.length === 0
 
     return ( 
     <article className={styles.post}>
@@ -58,7 +65,7 @@ function deleteComment(commentToDelete) {
                 if (line.type === 'paragraph') {
                     return <p key={line.content}>{line.content}</p>;
                 } else if (line.type === 'link') {
-                    return <p key={line.content}><a href="#">{line.content}</a></p>;
+                    return <p key={line.content}><a href="#">{line.content}</a></p>
                 }
             })}
         </div>
@@ -69,9 +76,13 @@ function deleteComment(commentToDelete) {
                 placeholder="Escreva um comentário..."
                 value={newCommentText}
                 onChange={handleNewCommentChange}
+                onInvalid={handleNewCommentInvalid}
+                required
             />
             <footer>
-                <button type="submit">Publicar</button>
+                <button type="submit" disabled={isNewCommentEmpty}>
+                    Publicar
+                </button>
             </footer>
         </form>
 
